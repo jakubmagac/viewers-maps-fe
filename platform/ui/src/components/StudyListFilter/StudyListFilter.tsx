@@ -1,11 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-
+import { useState } from 'react';
 import LegacyButton from '../LegacyButton';
 import Icon from '../Icon';
 import Typography from '../Typography';
 import InputGroup from '../InputGroup';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import { TextField, Button } from '@mui/material';
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 const StudyListFilter = ({
   filtersMeta,
@@ -20,6 +34,10 @@ const StudyListFilter = ({
   const { t } = useTranslation('StudyList');
   const { sortBy, sortDirection } = filterValues;
   const filterSorting = { sortBy, sortDirection };
+  const [consultateButtonClicked, setConsultateButtonClicked] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const setFilterSorting = sortingValues => {
     onChange({
       ...filterValues,
@@ -95,6 +113,26 @@ const StudyListFilter = ({
             onSortingChange={setFilterSorting}
             isSortingEnabled={isSortingEnabled}
           />
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '15px' }}>
+            <button
+              style={{
+                paddingTop: '10px',
+                backgroundColor: 'transparent',
+                color: 'white',
+                border: '2px solid white',
+                padding: '10px 20px',
+                borderRadius: '5px',
+                fontSize: '16px',
+                cursor: 'pointer',
+                transition: 'background-color 0.3s ease',
+              }}
+              onClick={handleOpen}
+            >
+              {t('Consultate via video or chat')}
+            </button>
+          </div>
+
+
         </div>
         {numOfStudies > 100 && (
           <div className="container m-auto">
@@ -103,7 +141,36 @@ const StudyListFilter = ({
             </div>
           </div>
         )}
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography variant="h6" component="h2" color="#15007F">
+              Enter details for connection to consultation
+            </Typography>
+            <TextField
+              id="pin"
+              label="Enter PIN"
+              variant="outlined"
+              color="primary"
+              sx={{ mt: 2, width: '100%' }}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              sx={{ mt: 2, backgroundColor: '#15007F', color: 'white' }}            >
+              Connect to room
+            </Button>
+          </Box>
+        </Modal>
+
+
       </div>
+
     </React.Fragment>
   );
 };
