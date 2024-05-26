@@ -1,0 +1,9 @@
+version: '3'
+services:
+  ohif-viewer:
+    image: ohif-viewer-image
+    container_name: ohif-viewer-container
+    environment:
+      - PORT=3002
+    ports:
+      - '3002:3002'
